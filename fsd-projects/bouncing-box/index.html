@@ -21,6 +21,7 @@
 
       .board {
         height: 100vh;
+        background-image: url(https://www.ledr.com/colours/black.jpg);
       }
     </style>
     <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
@@ -42,7 +43,7 @@
         var box = jQuery(".box"); // reference to the HTML .box element
         var board = jQuery(".board"); // reference to the HTML .board element
         var boardWidth = board.width(); // the maximum X-Coordinate of the screen
-
+        
         // update the boardWidth variable when the window is resized
         jQuery(window).on("resize", function () {
           boardWidth = board.width();
@@ -57,8 +58,13 @@
         // moves the Box to a new position on the screen along the X-Axis
         function moveBoxTo(newPositionX) {
           box.css("left", newPositionX);
-        }
+        
+         function moveBoxTo(newPositionY)
+         { box.css("top", newPositionY);
 
+         }
+
+        }
         // changes the text displayed on the Box
         function changeBoxText(newText) {
           box.text(newText);
@@ -69,22 +75,34 @@
         //////////////////////////////////////////////////////////////////
 
         // TODO 2 - Variable declarations
-
-
-
-
+        var positionX = 0;
+        var points = 0
+        var speed = 10  
+        var positionY = 10;
+    
 
         /**
          * This Function will be called 20 times/second.
          * Each time it is called, it should move the Box to a new location.
          * If the box drifts off the screen, turn it around!
          */
-        function update() {
-
-        
+        function update() { moveBoxTo(200);  
+           moveBoxTo(positionX); 
+          positionX +=speed;
+          
 
           
+        
+          if (positionX > boardWidth) 
+          { speed *= -1;}
+          if (positionX < 0)
+          { speed *= -1;}
+           {
+
+          }
+          
         }
+
 
         /**
          * This Function will be called each time the box is clicked.
@@ -94,8 +112,9 @@
          * - move the box to the left side of the screen.
          */
         function handleBoxClick() {
-
-
+          positionX = 0
+        changeBoxText(points ++);
+speed = 3 * points + 10;
 
 
         }
