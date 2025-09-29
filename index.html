@@ -1,48 +1,251 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>kaydens github or somthing</title>
-     <link rel="stylesheet" href="style.css" />
+    <title>Kayden's Pac-Man Page</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #000;
+        color: #ffe800;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #all-contents {
+        max-width: 900px;
+        margin: 48px auto;
+        background: #000;
+        border-radius: 24px;
+        box-shadow: 0 0 32px #00eaff88, 0 0 8px #ffe800;
+        padding: 32px 24px 16px 24px;
+        border: 6px solid #00eaff;
+        position: relative;
+        overflow: hidden;
+      }
+      .pacman-logo {
+        display: block;
+        margin: 0 auto 24px auto;
+        width: 340px;
+      }
+      nav {
+        background: #000;
+        border-radius: 14px;
+        box-shadow: 0 0 16px #00eaff88;
+        padding: 18px 24px;
+        margin-bottom: 32px;
+        text-align: center;
+        border: 2px solid #00eaff;
+      }
+      nav h1 {
+        color: #ffe800;
+        font-size: 2.2em;
+        margin: 0 0 8px 0;
+        text-shadow: 0 0 12px #00eaff, 0 0 2px #fff;
+        letter-spacing: 2px;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        text-transform: uppercase;
+      }
+      #nav-ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 0;
+      }
+      .nav-li {
+        display: flex;
+        align-items: center;
+      }
+      .nav-li a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2em;
+        padding: 12px 32px;
+        border-radius: 12px;
+        background: #000;
+        box-shadow: 0 0 8px #00eaff inset;
+        border: 2px solid #ffe800;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s,
+          border-color 0.2s, transform 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .nav-li a:hover,
+      .nav-li a:focus {
+        background: #ffe800;
+        color: #000;
+        box-shadow: 0 0 32px #ffe800, 0 0 8px #00eaff;
+        border-color: #00eaff;
+        transform: scale(1.08);
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        background: #ffe800;
+        border-radius: 50%;
+        margin: 0 10px;
+        display: inline-block;
+        box-shadow: 0 0 8px #ffe800;
+      }
+      .sidebar-img {
+        width: 180px;
+        border-radius: 16px;
+        border: 4px solid #00eaff;
+        box-shadow: 0 0 16px #ffe800;
+        margin-bottom: 24px;
+      }
+      .content h2 {
+        color: #ffe800;
+        font-size: 2em;
+        margin-bottom: 18px;
+        text-shadow: 0 0 8px #00eaff, 0 0 2px #fff;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        text-transform: uppercase;
+      }
+      .content p {
+        font-size: 1.2em;
+        margin-bottom: 24px;
+        color: #fff;
+      }
+      #interests {
+        background: #000;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 0 12px #00eaff44;
+        border: 2px solid #00eaff;
+        margin-bottom: 24px;
+      }
+      #interests h3 {
+        color: #ffe800;
+        font-size: 1.3em;
+        margin-bottom: 12px;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        text-transform: uppercase;
+      }
+      #interests ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      #interests li {
+        font-size: 1.1em;
+        color: #fff;
+        margin-bottom: 8px;
+        padding: 6px 0;
+        border-bottom: 1px solid #ffe80044;
+        font-family: "Press Start 2P", Arial, sans-serif;
+      }
+      /* Pac-Man and Ghosts */
+      .pacman {
+        width: 32px;
+        height: 32px;
+        background: #ffe800;
+        border-radius: 50%;
+        position: relative;
+        margin-right: 10px;
+        display: inline-block;
+      }
+      .pacman::before {
+        content: "";
+        position: absolute;
+        right: -8px;
+        top: 8px;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 16px solid #000;
+      }
+      .ghost {
+        width: 32px;
+        height: 32px;
+        background: #00eaff;
+        border-radius: 16px 16px 8px 8px;
+        position: relative;
+        margin-left: 10px;
+        display: inline-block;
+      }
+      .ghost::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 8px;
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 12px 0 #fff;
+      }
+      .ghost::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        bottom: 0;
+        width: 20px;
+        height: 8px;
+        background: repeating-linear-gradient(
+          90deg,
+          #000 0 4px,
+          transparent 4px 8px
+        );
+        border-radius: 0 0 8px 8px;
+      }
+    </style>
   </head>
 
   <body>
     <!-- All content goes here -->
     <div id="all-contents">
+      <div style="text-align: center; margin-bottom: 16px">
+        <img
+          class="pacman-logo"
+          src="data:image/png;base64,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"
+          alt="Pac-Man Logo"
+          style="width: 120px"
+        />
+      </div>
       <nav>
+        <h1>Kayden's Page</h1>
+        <ul id="nav-ul">
+          <li class="nav-li">
+            <span class="pacman"></span><a href="portfolio.html">Portfolio</a
+            ><span class="dot"></span>
+          </li>
+          <li class="nav-li">
+            <span class="ghost"></span
+            ><a id="navanchor" href="images.html">Images</a>
+          </li>
+        </ul>
       </nav>
       <main>
         <!-- Sidebar section -->
-  <div class="sidebar">
-  <img class="sidebar-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3BQ8flgOjHEK2RA87hFiwzdjgoEJaqjXEoA&s">
-  </div>
+        <div class="sidebar">
+          <img
+            class="sidebar-img"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3BQ8flgOjHEK2RA87hFiwzdjgoEJaqjXEoA&s"
+          />
+        </div>
 
-  <!-- Content section -->
-  <div class="content">
-  <h2>My peasentation</h2>
-  <p>I just work here</p>
+        <!-- Content section -->
+        <div class="content">
+          <h2>My peasentation</h2>
+          <p>I just work here</p>
 
-   <!-- Interests section -->
-  <div id="interests">
-    <h3>Interests</h3>
-    <ul>
-      <li>Slip|Avenged</li>
-      <li>Knot|Sevenfold</li>
-      <li>Baking Cupcakes</li>
-    </ul>
-  </div>
-  </div>
-  <nav>
-  <h1>Kayden Parnell</h1>
-  <ul id="nav-ul">
-    <li class="nav-li">
-    </li>
-    <li class="nav-li">
-      <a href="portfolio.html">Portfolio</a>
-      <li class="nav-li"><a id="navanchor" href="images.html">Images</a>
-                  </li>
-    </li>
-  </ul>
-  </nav>
+          <!-- Interests section -->
+          <div id="interests">
+            <h3>Interests</h3>
+            <ul>
+              <li>Working</li>
+              <li>Drumming</li>
+              <li>Baking Cupcakes</li>
+            </ul>
+          </div>
+        </div>
+        <!-- ...Pac-Man menu already above... -->
       </main>
     </div>
   </body>

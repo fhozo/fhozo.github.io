@@ -2,19 +2,121 @@
 <html>
   <head>
     <title>Kayden Parnell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background: #111;
+        color: #fff;
+        font-family: 'Press Start 2P', monospace;
+        margin: 0;
+        padding: 0;
+      }
+      #all-contents {
+        max-width: 700px;
+        margin: 60px auto;
+        background: rgba(0,0,0,0.85);
+        border-radius: 18px;
+        box-shadow: 0 0 32px #00ffe7, 0 0 8px #ff00c8;
+        padding: 32px 24px;
+        border: 4px solid #00ffe7;
+      }
+      nav {
+        background: #222;
+        border-radius: 12px;
+        box-shadow: 0 0 12px #ff00c8;
+        padding: 18px 24px;
+        margin-bottom: 32px;
+        text-align: center;
+      }
+      nav h1 {
+        color: #00ffe7;
+        font-size: 2.2em;
+        margin: 0 0 8px 0;
+        text-shadow: 0 0 8px #ff00c8, 0 0 2px #fff;
+        letter-spacing: 2px;
+      }
+      #nav-ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+      }
+      .nav-li a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+        padding: 8px 18px;
+        border-radius: 8px;
+        background: #222;
+        box-shadow: 0 0 8px #00ffe7 inset;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      }
+      .nav-li a:hover {
+        background: #ff00c8;
+        color: #00ffe7;
+        box-shadow: 0 0 16px #ff00c8;
+      }
+      main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+      }
+      .content {
+        width: 100%;
+        text-align: center;
+      }
+      .content h1 {
+        color: #ff00c8;
+        font-size: 2em;
+        margin-bottom: 32px;
+        text-shadow: 0 0 8px #00ffe7, 0 0 2px #fff;
+      }
+      #portfolio {
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 500px;
+      }
+      #portfolio li {
+        margin: 24px 0;
+      }
+      #portfolio a {
+        display: block;
+        color: #fff;
+        background: #222;
+        border: 2px solid #00ffe7;
+        border-radius: 10px;
+        padding: 18px 0;
+        font-size: 1.1em;
+        text-decoration: none;
+        box-shadow: 0 0 12px #ff00c8 inset;
+        letter-spacing: 1px;
+        transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      }
+      #portfolio a:hover {
+        background: #ff00c8;
+        color: #00ffe7;
+        border-color: #ff00c8;
+        box-shadow: 0 0 24px #00ffe7;
+        transform: scale(1.05);
+      }
+    </style>
   </head>
 
   <body>
     <!-- All content goes here -->
     <div id="all-contents">
  <nav>
-  <h1>Your Name's Amazing Website</h1>
+  <h1>Kayden Parnell Portfolio</h1>
   <ul id="nav-ul">
     <li class="nav-li">
       <a href="index.html">Home</a>
     </li>
     <li class="nav-li">
-      <a href="portfolio.html">Portfolio</a>
+      <a href="images.html">Images</a>
     </li>
   </ul>
 </nav>
