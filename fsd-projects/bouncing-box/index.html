@@ -8,20 +8,196 @@
       .box {
         width: 70px;
         height: 70px;
-        background-color: teal;
+        background: linear-gradient(135deg, #00ffe7 0%, #ff00c8 100%);
         font-size: 300%;
         text-align: center;
         user-select: none;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: absolute;
         top: 100px;
-        /* Change me! */
         left: 0px;
+        border-radius: 18px;
+        box-shadow: 0 0 24px #00ffe7, 0 0 8px #ff00c8;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+      }
+
+      .box.bounce {
+        animation: bounce 0.3s;
+      }
+      @keyframes bounce {
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
 
       .board {
         height: 100vh;
-        background-image: url(https://www.ledr.com/colours/black.jpg);
+        background: radial-gradient(ellipse at center, #222 0%, #000 100%);
+        overflow: hidden;
+        transition: transform 0.2s linear;
+        transform-origin: 50% 50%;
+      }
+      /* Board spinning animation */
+      .spin {
+        transition: transform 0.2s linear;
+      }
+
+      .explosion {
+        position: absolute;
+        pointer-events: none;
+        width: 120px;
+        height: 120px;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        border-radius: 50%;
+        animation: supernova 0.6s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        opacity: 1;
+      }
+      .explosion-core {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 40px;
+        height: 40px;
+        background: radial-gradient(circle, #fff 0%, #ffe800 60%, #ff00c8 100%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 40px 20px #ffe80099, 0 0 80px 40px #ff00c888;
+      }
+      .explosion-ray {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 8px;
+        height: 60px;
+        background: linear-gradient(
+          to bottom,
+          #fff 0%,
+          #ffe800 60%,
+          #ff00c8 100%
+        );
+        border-radius: 4px;
+        transform-origin: 50% 80%;
+        opacity: 0.7;
+        filter: blur(1px);
+      }
+      /* 8 rays at different angles */
+      .explosion-ray.r0 {
+        transform: translate(-50%, -80%) rotate(0deg);
+      }
+      .explosion-ray.r1 {
+        transform: translate(-50%, -80%) rotate(45deg);
+      }
+      .explosion-ray.r2 {
+        transform: translate(-50%, -80%) rotate(90deg);
+      }
+      .explosion-ray.r3 {
+        transform: translate(-50%, -80%) rotate(135deg);
+      }
+      .explosion-ray.r4 {
+        transform: translate(-50%, -80%) rotate(180deg);
+      }
+      .explosion-ray.r5 {
+        transform: translate(-50%, -80%) rotate(225deg);
+      }
+      .explosion-ray.r6 {
+        transform: translate(-50%, -80%) rotate(270deg);
+      }
+      .explosion-ray.r7 {
+        transform: translate(-50%, -80%) rotate(315deg);
+      }
+      @keyframes supernova {
+        0% {
+          opacity: 1;
+          transform: scale(0.5);
+        }
+        60% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(2.2);
+        }
+      }
+
+      .score {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        font-size: 2em;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid #00ffe7;
+        border-radius: 12px;
+        padding: 10px 32px;
+        z-index: 10;
+        box-shadow: 0 0 16px #ff00c8;
+        letter-spacing: 2px;
+      }
+      .poison-overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #000;
+        opacity: 0;
+        z-index: 9999;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s linear;
+      }
+      .poison-overlay.active {
+        pointer-events: all;
+      }
+      .poison-overlay.full {
+        opacity: 1 !important;
+        pointer-events: all;
+      }
+      .poison-message {
+        color: #ffe800;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        font-size: 2em;
+        text-align: center;
+        text-shadow: 0 0 16px #ff00c8, 0 0 2px #fff;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid #ff00c8;
+        border-radius: 16px;
+        padding: 32px 48px;
+        box-shadow: 0 0 32px #00ffe7;
+        display: block;
+      }
+      .poison-message.hide {
+        display: none;
+      }
+      .death-message {
+        color: #fff;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        font-size: 2.5em;
+        text-align: center;
+        text-shadow: 0 0 24px #ff0044, 0 0 2px #fff;
+        background: #000;
+        border: 2px solid #ff0044;
+        border-radius: 16px;
+        padding: 40px 60px;
+        box-shadow: 0 0 32px #ff0044;
+        display: block;
       }
     </style>
     <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
@@ -29,7 +205,17 @@
 
   <body class="board">
     <!-- HTML for the box -->
+    <div class="score">Score: <span id="score">0</span></div>
     <div class="box">?</div>
+    <div class="poison-overlay" id="poisonOverlay">
+      <div class="poison-message" id="poisonMsg">
+        You have carpal tunnel!<br />Press
+        <span style="color: #00ffe7">SPACE</span>!
+      </div>
+      <div class="death-message" id="deathMsg" style="display: none">
+        You Died!
+      </div>
+    </div>
 
     <script>
       (function () {
@@ -42,32 +228,172 @@
 
         var box = jQuery(".box"); // reference to the HTML .box element
         var board = jQuery(".board"); // reference to the HTML .board element
-        var boardWidth = board.width(); // the maximum X-Coordinate of the screen
-        
-        // update the boardWidth variable when the window is resized
+        var poisonOverlay = jQuery("#poisonOverlay");
+        var poisoned = false;
+        // Letter challenge variables
+        var letterChallengeActive = false;
+        var letterChallengeLetter = "";
+        var letterChallengeTimer = null;
+        var letterChallengeTimeout = null;
+        var letterOverlay = null;
+        var spinInterval = null;
+        var spinSpeed = 0; // degrees per update
+        var spinAngle = 0;
+        var zoomLevel = 1;
+        var poisonTimer = null;
+        var poisonTextTimer = null;
+        var poisonDeathTimer = null;
+        var poisonFadeTimer = null;
+        var poisonStartTime = null;
+        var dead = false;
+        var boardWidth = board.width();
+        var boardHeight = board.height();
+        // update the boardWidth/Height variable when the window is resized
         jQuery(window).on("resize", function () {
           boardWidth = board.width();
+          boardHeight = board.height();
         });
 
         // Every 50 milliseconds, call the update Function (see below)
         setInterval(update, 50);
 
+        // Letter challenge overlay setup
+        function showLetterOverlay(letter) {
+          if (!letterOverlay) {
+            letterOverlay = jQuery(
+              '<div id="letterOverlay" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);color:#ffe800;font-size:5em;font-family:monospace;text-shadow:0 0 16px #ff00c8,0 0 2px #fff;"></div>'
+            );
+            jQuery("body").append(letterOverlay);
+          }
+          letterOverlay.text("Press: " + letter.toUpperCase());
+          letterOverlay.show();
+        }
+        function hideLetterOverlay() {
+          if (letterOverlay) letterOverlay.hide();
+        }
+
+        function startLetterChallenge() {
+          if (letterChallengeActive) return;
+          var alphabet = "abcdefghijklmnopqrstuvwxyz";
+          letterChallengeLetter =
+            alphabet[Math.floor(Math.random() * alphabet.length)];
+          letterChallengeActive = true;
+          showLetterOverlay(letterChallengeLetter);
+          // 7 second timer to lose if not pressed
+          letterChallengeTimeout = setTimeout(function () {
+            letterChallengeActive = false;
+            hideLetterOverlay();
+            // Lose the game
+            dead = true;
+            poisonOverlay.addClass("active full");
+            poisonOverlay.css("opacity", 1);
+            jQuery("#poisonMsg").addClass("hide");
+            jQuery("#deathMsg").show();
+          }, 7000);
+        }
+        // Start a new challenge every 15 seconds
+        setInterval(function () {
+          if (!dead && !poisoned && !letterChallengeActive) {
+            startLetterChallenge();
+          }
+        }, 15000);
+        // Every 2 seconds, randomize the main box's direction
+        setInterval(function () {
+          if (!dead && !poisoned) {
+            var angle = Math.random() * Math.PI * 2;
+            var speed = Math.sqrt(speedX * speedX + speedY * speedY);
+            speedX = Math.round(Math.cos(angle) * speed);
+            speedY = Math.round(Math.sin(angle) * speed);
+          }
+        }, 2000);
+
+        // Poison effect every 10 seconds
+        function startPoisonTimer() {
+          if (poisonTimer) clearTimeout(poisonTimer);
+          poisonTimer = setTimeout(triggerPoison, 10000);
+        }
+        function triggerPoison() {
+          poisoned = true;
+          poisonOverlay.removeClass("full");
+          poisonOverlay.addClass("active");
+          jQuery("#poisonMsg").removeClass("hide");
+          jQuery("#deathMsg").hide();
+          poisonStartTime = Date.now();
+          // Hide text after 1.5s
+          if (poisonTextTimer) clearTimeout(poisonTextTimer);
+          poisonTextTimer = setTimeout(function () {
+            jQuery("#poisonMsg").addClass("hide");
+          }, 1500);
+          // Gradually increase opacity to 1 over 6s
+          if (poisonFadeTimer) clearInterval(poisonFadeTimer);
+          poisonFadeTimer = setInterval(function () {
+            var elapsed = (Date.now() - poisonStartTime) / 1000;
+            var opacity = Math.min(1, elapsed / 6);
+            poisonOverlay.css("opacity", opacity);
+          }, 50);
+          // Go full black and die after 6s
+          if (poisonDeathTimer) clearTimeout(poisonDeathTimer);
+          poisonDeathTimer = setTimeout(function () {
+            poisonOverlay.addClass("full");
+            poisonOverlay.css("opacity", 1);
+            jQuery("#poisonMsg").addClass("hide");
+            jQuery("#deathMsg").show();
+            dead = true;
+            if (poisonFadeTimer) clearInterval(poisonFadeTimer);
+          }, 6000);
+        }
+        function clearPoison() {
+          if (dead) return;
+          poisoned = false;
+          poisonOverlay.removeClass("active full");
+          poisonOverlay.css("opacity", 0);
+          jQuery("#poisonMsg").removeClass("hide");
+          jQuery("#deathMsg").hide();
+          if (poisonTextTimer) clearTimeout(poisonTextTimer);
+          if (poisonDeathTimer) clearTimeout(poisonDeathTimer);
+          if (poisonFadeTimer) clearInterval(poisonFadeTimer);
+          startPoisonTimer();
+        }
+        startPoisonTimer();
+
+        // Listen for spacebar to clear poison, R to restart, and letter challenge
+        jQuery(document).on("keydown", function (e) {
+          if (poisoned && !dead && (e.code === "Space" || e.keyCode === 32)) {
+            clearPoison();
+          }
+          // Letter challenge: check if correct key pressed
+          if (
+            letterChallengeActive &&
+            e.key &&
+            e.key.length === 1 &&
+            e.key.toLowerCase() === letterChallengeLetter
+          ) {
+            letterChallengeActive = false;
+            hideLetterOverlay();
+            clearTimeout(letterChallengeTimeout);
+          }
+          // R key restarts the game
+          if (
+            (e.code === "KeyR" || e.key === "r" || e.key === "R") &&
+            !e.repeat
+          ) {
+            location.reload();
+          }
+        });
+
         // Every time the box is clicked, call the handleBoxClick Function (see below)
         box.on("click", handleBoxClick);
 
         // moves the Box to a new position on the screen along the X-Axis
-        function moveBoxTo(newPositionX) {
-          box.css("left", newPositionX);
-        
-         function moveBoxTo(newPositionY)
-         { box.css("top", newPositionY);
-
-         }
-
+        function moveBoxTo(newPositionX, newPositionY) {
+          box.css({ left: newPositionX, top: newPositionY });
         }
         // changes the text displayed on the Box
         function changeBoxText(newText) {
           box.text(newText);
+        }
+        function updateScore(points) {
+          jQuery("#score").text(points);
         }
 
         //////////////////////////////////////////////////////////////////
@@ -76,33 +402,213 @@
 
         // TODO 2 - Variable declarations
         var positionX = 0;
-        var points = 0
-        var speed = 10  
-        var positionY = 10;
-    
+        var positionY = 100;
+        var points = 0;
+        var speedX = 10;
+        var speedY = 7;
+        // Decoy boxes array
+        var decoys = [];
+        var decoySize = 70;
+        var colors = [
+          "linear-gradient(135deg, #00ffe7 0%, #ff00c8 100%)",
+          "linear-gradient(135deg, #ffe800 0%, #ff00c8 100%)",
+          "linear-gradient(135deg, #00ffe7 0%, #ffe800 100%)",
+          "linear-gradient(135deg, #ff00c8 0%, #00ffe7 100%)",
+          "linear-gradient(135deg, #ff00c8 0%, #ffe800 100%)",
+        ];
+
+        // Create a decoy box
+        function createDecoy() {
+          var decoy = jQuery(
+            '<div class="decoyBox" style="position:absolute;width:70px;height:70px;background:linear-gradient(135deg,#ffe800 0%,#00ffe7 100%);border-radius:18px;box-shadow:0 0 24px #ffe800,0 0 8px #00ffe7;color:#fff;display:flex;align-items:center;justify-content:center;font-size:300%;z-index:15;cursor:pointer;">?</div>'
+          );
+          var decoyObj = {
+            el: decoy,
+            x: Math.random() * (boardWidth - decoySize),
+            y: Math.random() * (boardHeight - decoySize),
+            speedX: Math.round(Math.cos(Math.random() * Math.PI * 2) * 10),
+            speedY: Math.round(Math.sin(Math.random() * Math.PI * 2) * 7),
+          };
+          decoy.on("click", function (e) {
+            e.stopPropagation(); // Prevent click from reaching box
+            // No points awarded, maybe a quick flash or shake
+            decoy.addClass("bounce");
+            setTimeout(function () {
+              decoy.removeClass("bounce");
+            }, 250);
+          });
+          jQuery("body").append(decoy);
+          decoys.push(decoyObj);
+        }
 
         /**
          * This Function will be called 20 times/second.
          * Each time it is called, it should move the Box to a new location.
          * If the box drifts off the screen, turn it around!
          */
-        function update() { moveBoxTo(200);  
-           moveBoxTo(positionX); 
-          positionX +=speed;
-          
+        // Bombs array
+        var bombs = [];
+        var bombSize = 70;
+        function createBomb() {
+          var bomb = jQuery(
+            '<div class="bombShape" style="position:absolute;width:70px;height:70px;background:radial-gradient(circle,#ff0044 60%,#fff 100%);border-radius:50%;box-shadow:0 0 32px #ff0044,0 0 8px #fff;z-index:20;cursor:pointer;"></div>'
+          );
+          var bombObj = {
+            el: bomb,
+            x: Math.random() * (boardWidth - bombSize),
+            y: Math.random() * (boardHeight - bombSize),
+            speedX: 0,
+            speedY: 0,
+          };
+          bomb.on("click", function () {
+            if (typeof dead !== "undefined") dead = true;
+            bomb.css("background", "black");
+          });
+          jQuery("body").append(bomb);
+          bombs.push(bombObj);
+        }
+        // Always have at least one bomb at start
+        createBomb();
 
-          
-        
-          if (positionX > boardWidth) 
-          { speed *= -1;}
-          if (positionX < 0)
-          { speed *= -1;}
-           {
-
+        function update() {
+          // Decoy movement: always match box speed/direction and number
+          for (var d = 0; d < decoys.length; d++) {
+            var decoyObj = decoys[d];
+            // Decoys are 1.2x faster than the main box
+            decoyObj.speedX = speedX * 1.2;
+            decoyObj.speedY = speedY * 1.2;
+            decoyObj.x += decoyObj.speedX;
+            decoyObj.y += decoyObj.speedY;
+            // Bounce horizontally
+            if (decoyObj.x < 0) {
+              decoyObj.x = 0;
+              decoyObj.speedX *= -1;
+            }
+            if (decoyObj.x > boardWidth - decoySize) {
+              decoyObj.x = boardWidth - decoySize;
+              decoyObj.speedX *= -1;
+            }
+            // Bounce vertically
+            if (decoyObj.y < 0) {
+              decoyObj.y = 0;
+              decoyObj.speedY *= -1;
+            }
+            if (decoyObj.y > boardHeight - decoySize) {
+              decoyObj.y = boardHeight - decoySize;
+              decoyObj.speedY *= -1;
+            }
+            // Collision with main box
+            if (
+              decoyObj.x < positionX + 70 &&
+              decoyObj.x + decoySize > positionX &&
+              decoyObj.y < positionY + 70 &&
+              decoyObj.y + decoySize > positionY
+            ) {
+              // Simple bounce: reverse both speeds
+              var tempX = decoyObj.speedX;
+              var tempY = decoyObj.speedY;
+              decoyObj.speedX = -decoyObj.speedX;
+              decoyObj.speedY = -decoyObj.speedY;
+              speedX = -speedX;
+              speedY = -speedY;
+              // Move them apart slightly to prevent sticking
+              decoyObj.x += decoyObj.speedX;
+              decoyObj.y += decoyObj.speedY;
+              positionX += speedX;
+              positionY += speedY;
+            }
+            decoyObj.el.css({ left: decoyObj.x, top: decoyObj.y });
+            decoyObj.el.text(points);
           }
-          
+          // Always zoom out visually, but keep logical boundaries the same
+          var visualZoom = 0.7; // 70% zoom out for the board
+          if (spinSpeed > 0) {
+            spinAngle = (spinAngle + spinSpeed) % 360;
+            board.css(
+              "transform",
+              "rotate(" + spinAngle + "deg) scale(" + visualZoom + ")"
+            );
+          } else {
+            board.css("transform", "scale(" + visualZoom + ")");
+          }
+          if (poisoned || dead) return; // Pause game while poisoned or dead
+          // Box movement
+          positionX += speedX;
+          positionY += speedY;
+          // Bounce horizontally
+          if (positionX < 0) {
+            positionX = 0;
+            speedX *= -1;
+            bounceEffect();
+          }
+          if (positionX > boardWidth - box.width()) {
+            positionX = boardWidth - box.width();
+            speedX *= -1;
+            bounceEffect();
+          }
+          // Bounce vertically
+          if (positionY < 0) {
+            positionY = 0;
+            speedY *= -1;
+            bounceEffect();
+          }
+          if (positionY > boardHeight - box.height()) {
+            positionY = boardHeight - box.height();
+            speedY *= -1;
+            bounceEffect();
+          }
+          moveBoxTo(positionX, positionY);
+
+          // Bombs movement (all bombs are faster than box)
+          for (var i = 0; i < bombs.length; i++) {
+            var bombObj = bombs[i];
+            // Bombs are 1.5x faster than box
+            var bombSpeed = Math.sqrt(speedX * speedX + speedY * speedY) * 1.5;
+            var angle = Math.atan2(bombObj.speedY, bombObj.speedX);
+            // If bomb has no speed yet, randomize direction
+            if (bombObj.speedX === 0 && bombObj.speedY === 0) {
+              var randAngle = Math.random() * Math.PI * 2;
+              bombObj.speedX = Math.round(Math.cos(randAngle) * bombSpeed);
+              bombObj.speedY = Math.round(Math.sin(randAngle) * bombSpeed);
+            } else {
+              // Keep direction, just update speed
+              var currentAngle = Math.atan2(bombObj.speedY, bombObj.speedX);
+              bombObj.speedX = Math.round(Math.cos(currentAngle) * bombSpeed);
+              bombObj.speedY = Math.round(Math.sin(currentAngle) * bombSpeed);
+            }
+            bombObj.x += bombObj.speedX;
+            bombObj.y += bombObj.speedY;
+            // Bounce horizontally
+            if (bombObj.x < 0) {
+              bombObj.x = 0;
+              bombObj.speedX *= -1;
+            }
+            if (bombObj.x > boardWidth - bombSize) {
+              bombObj.x = boardWidth - bombSize;
+              bombObj.speedX *= -1;
+            }
+            // Bounce vertically
+            if (bombObj.y < 0) {
+              bombObj.y = 0;
+              bombObj.speedY *= -1;
+            }
+            if (bombObj.y > boardHeight - bombSize) {
+              bombObj.y = boardHeight - bombSize;
+              bombObj.speedY *= -1;
+            }
+            bombObj.el.css({ left: bombObj.x, top: bombObj.y });
+          }
         }
 
+        function bounceEffect() {
+          // Change color and animate
+          var color = colors[Math.floor(Math.random() * colors.length)];
+          box.css("background", color);
+          box.addClass("bounce");
+          setTimeout(function () {
+            box.removeClass("bounce");
+          }, 250);
+        }
 
         /**
          * This Function will be called each time the box is clicked.
@@ -112,15 +618,59 @@
          * - move the box to the left side of the screen.
          */
         function handleBoxClick() {
-          positionX = 0
-        changeBoxText(points ++);
-speed = 3 * points + 10;
+          // Supernova explosion effect
+          var boxOffset = box.offset();
+          var boardOffset = board.offset();
+          var expX = boxOffset.left - boardOffset.left;
+          var expY = boxOffset.top - boardOffset.top;
+          var explosion = jQuery('<div class="explosion"></div>');
+          // Add core and rays
+          explosion.append('<div class="explosion-core"></div>');
+          for (var i = 0; i < 8; i++) {
+            explosion.append('<div class="explosion-ray r' + i + '"></div>');
+          }
+          explosion.css({ left: expX - 25, top: expY - 25 });
+          board.append(explosion);
+          setTimeout(function () {
+            explosion.remove();
+          }, 600);
 
-
+          points++;
+          updateScore(points);
+          changeBoxText(points);
+          // Every 4 points, increase spin speed
+          if (points % 4 === 0) {
+            spinSpeed += 2; // Increase spin speed (degrees per update)
+            board.addClass("spin");
+          }
+          // Increase speed and randomize direction, scale up faster for difficulty
+          var angle = Math.random() * Math.PI * 2;
+          var speed = 10 + points * 3; // Increase scaling for difficulty
+          speedX = Math.round(Math.cos(angle) * speed);
+          speedY = Math.round(Math.sin(angle) * speed);
+          // Move to random position
+          positionX = Math.random() * (boardWidth - box.width());
+          positionY = Math.random() * (boardHeight - box.height());
+          // Every 3 points, add a new bomb
+          if (points % 3 === 0) {
+            createBomb();
+          }
+          // Every 5 points, add a new decoy box
+          if (points % 5 === 0) {
+            createDecoy();
+          }
+          // All bombs jump to random positions
+          for (var i = 0; i < bombs.length; i++) {
+            bombs[i].x = Math.random() * (boardWidth - bombSize);
+            bombs[i].y = Math.random() * (boardHeight - bombSize);
+            // Randomize direction
+            var randAngle = Math.random() * Math.PI * 2;
+            var bombSpeed = Math.sqrt(speedX * speedX + speedY * speedY) * 1.5;
+            bombs[i].speedX = Math.round(Math.cos(randAngle) * bombSpeed);
+            bombs[i].speedY = Math.round(Math.sin(randAngle) * bombSpeed);
+          }
+          bounceEffect();
         }
-
-
-        
       })();
     </script>
   </body>
