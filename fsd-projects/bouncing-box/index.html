@@ -5,6 +5,73 @@
     <title>Bouncing Box</title>
     <script src="jquery.min.js"></script>
     <style>
+      /* Sega Genesis Start Screen Styles */
+      @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+      #startMenu {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100000;
+        background: linear-gradient(180deg, #000 60%, #0033a0 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 8px solid #fff;
+        box-shadow: 0 0 64px #0033a0, 0 0 0 16px #222 inset;
+      }
+      .sega-logo {
+        font-family: "Press Start 2P", Arial, sans-serif;
+        font-size: 4em;
+        color: #00aaff;
+        letter-spacing: 0.1em;
+        text-shadow: 0 0 24px #00aaff, 0 2px 0 #fff, 0 4px 0 #0033a0,
+          0 0 64px #00aaff;
+        margin-bottom: 0.2em;
+        margin-top: 0.2em;
+        text-align: center;
+        line-height: 1.1;
+      }
+      .sega-licensed {
+        font-family: "Press Start 2P", Arial, sans-serif;
+        color: #fff;
+        font-size: 1em;
+        margin-bottom: 2em;
+        text-shadow: 0 0 8px #0033a0, 0 2px 0 #000;
+        text-align: center;
+      }
+      .start-controls {
+        color: #fff;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        font-size: 1em;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid #00aaff;
+        border-radius: 12px;
+        padding: 24px 32px;
+        box-shadow: 0 0 16px #00aaff;
+        margin-bottom: 2em;
+        max-width: 90vw;
+        text-align: left;
+      }
+      #startButton {
+        font-size: 2em;
+        padding: 16px 48px;
+        border-radius: 12px;
+        border: none;
+        background: #00aaff;
+        color: #fff;
+        box-shadow: 0 0 16px #0033a0;
+        cursor: pointer;
+        font-family: "Press Start 2P", Arial, sans-serif;
+        letter-spacing: 0.1em;
+        margin-top: 1em;
+        transition: background 0.2s;
+      }
+      #startButton:hover {
+        background: #0077cc;
+      }
       .box {
         width: 70px;
         height: 70px;
@@ -204,6 +271,22 @@
   </head>
 
   <body class="board">
+    <div id="startMenu">
+      <div class="sega-logo">BOUNCING BOX</div>
+      <div class="sega-licensed">LICENSED BY<br />BOUNCING BOX ENTERPRISES</div>
+      <div class="start-controls">
+        <b>Controls:</b><br />
+        - Click the box to score points and increase speed<br />
+        - Avoid bombs (red circles) and decoys (yellow/blue boxes)<br />
+        - Press <b>SPACE</b> to clear carpal tunnel<br />
+        - Press <b>R</b> to restart<br />
+        - Every 15s, press the shown letter key in time<br />
+        - The board spins and zooms as you score<br />
+        <br />
+        <b>Goal:</b> Get the highest score you can!
+      </div>
+      <button id="startButton">START</button>
+    </div>
     <!-- HTML for the box -->
     <div class="score">Score: <span id="score">0</span></div>
     <div class="box">?</div>
@@ -219,7 +302,21 @@
 
     <script>
       (function () {
-        "use strict";
+        var gameStarted = false;
+        // Hide game UI until started
+        jQuery(function () {
+          jQuery(".score, .box, .bombShape, .decoyBox, .poison-overlay").hide();
+        });
+        jQuery(document).on("click", "#startButton", function () {
+          jQuery("#startMenu").fadeOut(300, function () {
+            jQuery(
+              ".score, .box, .bombShape, .decoyBox, .poison-overlay"
+            ).show();
+          });
+          gameStarted = true;
+          startGameIntervals();
+        });
+        ("use strict");
         /* global jQuery */
 
         //////////////////////////////////////////////////////////////////
@@ -255,7 +352,35 @@
         });
 
         // Every 50 milliseconds, call the update Function (see below)
-        setInterval(update, 50);
+        // Game loop and challenge intervals
+        var gameLoopInterval = null;
+        var letterChallengeInterval = null;
+        var boxRandomizeInterval = null;
+        function startGameIntervals() {
+          if (!gameLoopInterval) {
+            gameLoopInterval = setInterval(function () {
+              if (gameStarted) update();
+            }, 50);
+          }
+          if (!letterChallengeInterval) {
+            letterChallengeInterval = setInterval(function () {
+              if (gameStarted && !dead && !poisoned && !letterChallengeActive) {
+                startLetterChallenge();
+              }
+            }, 15000);
+          }
+          if (!boxRandomizeInterval) {
+            boxRandomizeInterval = setInterval(function () {
+              if (gameStarted && !dead && !poisoned) {
+                var angle = Math.random() * Math.PI * 2;
+                var speed = Math.sqrt(speedX * speedX + speedY * speedY);
+                speedX = Math.round(Math.cos(angle) * speed);
+                speedY = Math.round(Math.sin(angle) * speed);
+              }
+            }, 2000);
+          }
+          startPoisonTimer();
+        }
 
         // Letter challenge overlay setup
         function showLetterOverlay(letter) {
@@ -292,20 +417,6 @@
           }, 7000);
         }
         // Start a new challenge every 15 seconds
-        setInterval(function () {
-          if (!dead && !poisoned && !letterChallengeActive) {
-            startLetterChallenge();
-          }
-        }, 15000);
-        // Every 2 seconds, randomize the main box's direction
-        setInterval(function () {
-          if (!dead && !poisoned) {
-            var angle = Math.random() * Math.PI * 2;
-            var speed = Math.sqrt(speedX * speedX + speedY * speedY);
-            speedX = Math.round(Math.cos(angle) * speed);
-            speedY = Math.round(Math.sin(angle) * speed);
-          }
-        }, 2000);
 
         // Poison effect every 10 seconds
         function startPoisonTimer() {
@@ -354,7 +465,6 @@
           if (poisonFadeTimer) clearInterval(poisonFadeTimer);
           startPoisonTimer();
         }
-        startPoisonTimer();
 
         // Listen for spacebar to clear poison, R to restart, and letter challenge
         jQuery(document).on("keydown", function (e) {
